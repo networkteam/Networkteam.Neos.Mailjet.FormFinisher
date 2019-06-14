@@ -1,0 +1,24 @@
+Neos:
+  Neos:
+    fusion:
+      autoInclude:
+        'Networkteam.Neos.Mailjet.FormFinisher': true
+
+    userInterface:
+      translation:
+        autoInclude:
+          'Networkteam.Neos.Mailjet.FormFinisher':
+            - 'NodeTypes/*'
+  Form:
+    presets:
+      default:
+        finisherPresets:
+          'Networkteam.Neos.Mailjet.FormFinisher:Finisher.Mailjet':
+            implementationClassName: Networkteam\Neos\Mailjet\FormFinisher\Form\Finisher\MailjetFinisher
+            options:
+              templateId: ''
+              errorReportingRecipient: ''
+              smtpHost: 'in-v3.mailjet.com'
+              smtpPort: 587
+              smtpUser: ''
+              smtpPassword: ''

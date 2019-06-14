@@ -1,0 +1,19 @@
+prototype(Networkteam.Neos.Mailjet.FormFinisher:Finisher.Mailjet.Definition) < prototype(Neos.Form.Builder:Finisher.Definition) {
+    formElementType = 'Networkteam.Neos.Mailjet.FormFinisher:Finisher.Mailjet'
+
+    options {
+        templateId = ${null}
+        smtpUser = ${null}
+        smtpPassword = ${null}
+        subject = ${null}
+        recipientAddress = ${null}
+        recipientName = ''
+        senderAddress = ${null}
+        senderName = ''
+        replyToAddress = ${null}
+        carbonCopyAddress = ${null}
+        blindCarbonCopyAddress = ${null}
+        testMode = ${false}
+    }
+
+}

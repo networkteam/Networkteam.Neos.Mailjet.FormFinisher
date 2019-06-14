@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+    <file original="" product-name="Networkteam.Neos.Mailjet.FormFinisher" source-language="en" datatype="plaintext">
+        <body>
+            <trans-unit id="groups.mailjet" xml:space="preserve">
+                <source>Mailjet</source>
+            </trans-unit>
+            <trans-unit id="ui.label" xml:space="preserve">
+                <source>Mailjet Finisher</source>
+            </trans-unit>
+            <trans-unit id="ui.help.message" xml:space="preserve">
+                <source>Reliable and scalable email delivery platform with SMTP and API. Real-time monitoring service for all your email traffic. Responsive email design with MJML and Passport.
+
+https://www.mailjet.com</source>
+            </trans-unit>
+            <trans-unit id="properties.templateId" xml:space="preserve">
+                <source>Template ID</source>
+            </trans-unit>
+            <trans-unit id="properties.templateId.ui.help.message" xml:space="preserve">
+                <source>Template ID is an identifier for a template that is previously created and stored in Mailjet's system. Visit the Use a Template section for more information.
+
+[dev.mailjet.com/guides](https://dev.mailjet.com/guides/index.html#use-a-template)
+
+The template ID can also be configured globally via `Settings.yaml`.</source>
+            </trans-unit>
+            <trans-unit id="properties.smtpUser" xml:space="preserve">
+                <source>User</source>
+            </trans-unit>
+            <trans-unit id="properties.smtpUser.ui.help.message" xml:space="preserve">
+                <source>The username is your API Key - you can find it in your API Key Management page. The key is generated automatically when your account is created.
+
+[dev.mailjet.com/guides](https://dev.mailjet.com/guides/#authentication)
+
+The username can also be configured globally via `Settings.yaml`.</source>
+            </trans-unit>
+            <trans-unit id="properties.smtpPassword" xml:space="preserve">
+                <source>Password</source>
+            </trans-unit>
+            <trans-unit id="properties.smtpPassword.ui.help.message" xml:space="preserve">
+                <source>The password is your API Secret Key - you can find it in your API Key Management page. The key is generated automatically when your account is created.
+
+[dev.mailjet.com/guides](https://dev.mailjet.com/guides/#authentication)
+
+The password can also be configured globally via `Settings.yaml`.</source>
+            </trans-unit>
+            <trans-unit id="properties.errorReportingRecipient" xml:space="preserve">
+                <source>Error reporting recipient</source>
+            </trans-unit>
+            <trans-unit id="properties.errorReportingRecipient.help.message" xml:space="preserve">
+                <source>This property sets a special header `X-MJ-TemplateErrorReporting` on the api request. It defines the email address, to which a carbon copy with the error message is sent.
+
+An error message is created, when something went wrong while compiling the email template.
+
+[dev.mailjet.com/guides](https://dev.mailjet.com/guides/index.html#x-mj-templateerrorreporting)</source>
+            </trans-unit>
+            <trans-unit id="properties.subject" xml:space="preserve">
+                <source>Subject</source>
+            </trans-unit>
+            <trans-unit id="properties.recipientAddress" xml:space="preserve">
+                <source>Recipient address</source>
+            </trans-unit>
+            <trans-unit id="properties.recipientName" xml:space="preserve">
+                <source>Recipient name</source>
+            </trans-unit>
+            <trans-unit id="properties.senderName" xml:space="preserve">
+                <source>Sender name</source>
+            </trans-unit>
+            <trans-unit id="properties.senderAddress" xml:space="preserve">
+                <source>Sender address</source>
+            </trans-unit>
+            <trans-unit id="properties.replyToAddress" xml:space="preserve">
+                <source>ReplyTo address</source>
+            </trans-unit>
+            <trans-unit id="properties.carbonCopyAddress" xml:space="preserve">
+                <source>CC address</source>
+            </trans-unit>
+            <trans-unit id="properties.blindCarbonCopyAddress" xml:space="preserve">
+                <source>BCC address</source>
+            </trans-unit>
+            <trans-unit id="properties.attachAllPersistentResources" xml:space="preserve">
+                <source>Attach all persistent resources</source>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>

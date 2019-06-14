@@ -16,9 +16,6 @@ use Neos\Flow\Annotations as Flow;
 
 class MailjetFinisher extends \Neos\Form\Core\Model\AbstractFinisher
 {
-    const FORMAT_PLAINTEXT = 'plaintext';
-    const FORMAT_HTML = 'html';
-
     /**
      * @var Service
      * @Flow\Inject
@@ -31,12 +28,15 @@ class MailjetFinisher extends \Neos\Form\Core\Model\AbstractFinisher
     protected $defaultOptions = array(
         'recipientName' => '',
         'senderName' => '',
-        'format' => self::FORMAT_HTML,
         'attachAllPersistentResources' => false,
         'attachments' => [],
         'testMode' => false,
-        'templateId' => 0,
-        'errorReportingRecipient' => '',
+        'templateId' => null,
+        'errorReportingRecipient' => null,
+        'smtpUser' => null,
+        'smtpPassword' => null,
+        'smtpHost' => 'in-v3.mailjet.com',
+        'smtpPort' => 587
     );
 
     /**
@@ -52,12 +52,10 @@ class MailjetFinisher extends \Neos\Form\Core\Model\AbstractFinisher
             throw new FinisherException('The "neos/swiftmailer" doesn\'t seem to be installed, but is required for the EmailFinisher to work!', 1503392532);
         }
         $formRuntime = $this->finisherContext->getFormRuntime();
-        $standaloneView = $this->initializeStandaloneView();
-        $standaloneView->assign('form', $formRuntime);
-        $referrer = $formRuntime->getRequest()->getHttpRequest()->getUri();
-        $standaloneView->assign('referrer', $referrer);
-        $message = $standaloneView->render();
+        $message = json_encode($formRuntime->getFormState()->getFormValues(), JSON_PRETTY_PRINT);
 
+        $templateId = $this->parseOption('templateId');
+        $errorReportingRecipient = $this->parseOption('errorReportingRecipient');
         $subject = $this->parseOption('subject');
         $recipientAddress = $this->parseOption('recipientAddress');
         $recipientName = $this->parseOption('recipientName');
@@ -66,8 +64,9 @@ class MailjetFinisher extends \Neos\Form\Core\Model\AbstractFinisher
         $replyToAddress = $this->parseOption('replyToAddress');
         $carbonCopyAddress = $this->parseOption('carbonCopyAddress');
         $blindCarbonCopyAddress = $this->parseOption('blindCarbonCopyAddress');
-        $format = $this->parseOption('format');
         $testMode = $this->parseOption('testMode');
+        $smtpUser = $this->parseOption('smtpUser');
+        $smtpPassword = $this->parseOption('smtpPassword');
 
         if ($subject === null) {
             throw new FinisherException('The option "subject" must be set for the EmailFinisher.', 1327060320);
@@ -84,13 +83,25 @@ class MailjetFinisher extends \Neos\Form\Core\Model\AbstractFinisher
 
         $mail = new SwiftMailerMessage();
 
-        $mail->getHeaders()->addTextHeader('X-MJ-VARS', json_encode($formRuntime->getFormState()->getFormValues()));
+        if ($smtpUser !== null && $smtpPassword !== null  ) {
+            $tf = new \Neos\SwiftMailer\TransportFactory();
+            $transport = $tf->create(\Swift_SmtpTransport::class, [
+                'host' => $this->parseOption('smtpHost'),
+                'port' => $this->parseOption('smtpPort'),
+                'username' => $smtpUser,
+                'password' => $smtpPassword,
+            ]);
+            $mailer = new \Neos\SwiftMailer\Mailer($transport);
+            ObjectAccess::setProperty($mail, 'mailer', $mailer, true);
+        }
+
+        $mail->getHeaders()->addTextHeader('X-MJ-VARS', json_encode($formRuntime->getFormState()->getFormValues(), JSON_UNESCAPED_UNICODE));
         $mail->getHeaders()->addTextHeader('X-MJ-TEMPLATELANGUAGE', "1");
         if ($this->parseOption('errorReportingRecipient') !== '' ) {
-            $mail->getHeaders()->addTextHeader('X-MJ-TEMPLATEERRORREPORTING', $this->parseOption('errorReportingRecipient'));
+            $mail->getHeaders()->addTextHeader('X-MJ-TEMPLATEERRORREPORTING', $errorReportingRecipient);
         }
-        
-        $mail->getHeaders()->addTextHeader('X-MJ-TEMPLATEID', $this->parseOption('templateId'));
+
+        $mail->getHeaders()->addTextHeader('X-MJ-TEMPLATEID', $templateId);
 
         $mail
             ->setFrom(array($senderAddress => $senderName))
@@ -114,11 +125,8 @@ class MailjetFinisher extends \Neos\Form\Core\Model\AbstractFinisher
             $mail->setBcc($blindCarbonCopyAddress);
         }
 
-        if ($format === self::FORMAT_PLAINTEXT) {
-            $mail->setBody($message, 'text/plain');
-        } else {
-            $mail->setBody($message, 'text/html');
-        }
+        $mail->setBody($message, 'text/plain');
+
         $this->addAttachments($mail);
 
         if ($testMode === true) {
@@ -129,47 +137,13 @@ class MailjetFinisher extends \Neos\Form\Core\Model\AbstractFinisher
                     'replyToAddress' => $replyToAddress,
                     'carbonCopyAddress' => $carbonCopyAddress,
                     'blindCarbonCopyAddress' => $blindCarbonCopyAddress,
-                    'message' => $message,
-                    'format' => $format,
+                    'message' => $message
                 ),
                 'E-Mail "' . $subject . '"'
             );
         } else {
             $mail->send();
         }
-    }
-
-    /**
-     * @return StandaloneView
-     * @throws FinisherException
-     */
-    protected function initializeStandaloneView()
-    {
-        $standaloneView = new StandaloneView();
-        if (isset($this->options['templatePathAndFilename'])) {
-            $templatePathAndFilename = $this->i18nService->getLocalizedFilename($this->options['templatePathAndFilename']);
-            $standaloneView->setTemplatePathAndFilename($templatePathAndFilename[0]);
-        } elseif (isset($this->options['templateSource'])) {
-            $standaloneView->setTemplateSource($this->options['templateSource']);
-        } else {
-            throw new FinisherException('The option "templatePathAndFilename" or "templateSource" must be set for the EmailFinisher.', 1327058829);
-        }
-
-
-        if (isset($this->options['partialRootPath'])) {
-            $standaloneView->setPartialRootPath($this->options['partialRootPath']);
-        }
-
-        if (isset($this->options['layoutRootPath'])) {
-            $standaloneView->setLayoutRootPath($this->options['layoutRootPath']);
-        }
-
-        $standaloneView->assign('formValues', $this->finisherContext->getFormValues());
-
-        if (isset($this->options['variables'])) {
-            $standaloneView->assignMultiple($this->options['variables']);
-        }
-        return $standaloneView;
     }
 
     /**
