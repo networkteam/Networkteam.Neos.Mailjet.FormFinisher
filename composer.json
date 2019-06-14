@@ -1,0 +1,18 @@
+{
+    "description": "Form Finisher using mailjet",
+    "type": "neos-package",
+    "name": "networkteam/neos-mailjet-formfinisher",
+    "require": {
+        "neos/flow": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "Networkteam\\Neos\\Mailjet\\FormFinisher\\": "Classes/"
+        }
+    },
+    "extra": {
+        "neos": {
+            "package-key": "Networkteam.Neos.Mailjet.FormFinisher"
+        }
+    }
+}
