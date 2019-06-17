@@ -1,6 +1,7 @@
 # Neos Mailjet Form Finisher
 
-This package provides an additional finisher to be used with [mailjet.com](http://mailjet.com) to send templated mails via their SMTP Api.
+This package provides an additional form finisher for the [Flow Form Framework](https://github.com/neos/form) to be used 
+with [mailjet.com](http://mailjet.com) to send template based mails via their SMTP API.
 
 ## Configuration
 
