@@ -7,7 +7,6 @@ namespace Networkteam\Neos\Mailjet\FormFinisher\Form\Finisher;
 
 use Neos\Flow\I18n\Service;
 use Neos\Flow\ResourceManagement\PersistentResource;
-use Neos\FluidAdaptor\View\StandaloneView;
 use Neos\Form\Core\Model\AbstractFinisher;
 use Neos\Form\Exception\FinisherException;
 use Neos\SwiftMailer\Message as SwiftMailerMessage;
