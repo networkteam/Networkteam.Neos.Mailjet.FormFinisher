@@ -3,13 +3,16 @@
     "type": "neos-package",
     "name": "networkteam/neos-mailjet-formfinisher",
     "require": {
-        "neos/form": "^4.1",
-        "neos/form-builder": "^1.1"
+        "neos/flow": "~6.0 || ~7.0",
+        "neos/swiftmailer": "~7.0"
     },
     "autoload": {
         "psr-4": {
             "Networkteam\\Neos\\Mailjet\\FormFinisher\\": "Classes/"
         }
+    },
+    "suggest": {
+        "neos/form-builder": "When using nodeType Networkteam.Neos.Mailjet.FormFinisher:Finisher.Mailjet the neos/form-builder package is needed."
     },
     "extra": {
         "neos": {
