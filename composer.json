@@ -17,6 +17,9 @@
     "extra": {
         "neos": {
             "package-key": "Networkteam.Neos.Mailjet.FormFinisher"
-        }
+        },
+        "applied-flow-migrations": [
+            "TYPO3.Form-20160601101500"
+        ]
     }
 }
